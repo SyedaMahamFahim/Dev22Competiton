@@ -10,6 +10,9 @@ import GetAllTasks from "./GetAllTasks/GetAllTasks";
 import ActiveTask from "./ActiveTask/ActiveTask";
 import SingleTask from "./SingleTask/SingleTask";
 import CreateProject from "./CreateProject/CreateProject";
+import Projects from "./Projects/Projects";
+import SingleProject from  './SingleProject/SingleProject'
+import CreateTask from "./CreateTask/CreateTask";
 export{
     LoginSignup,
     Home,
@@ -22,5 +25,8 @@ export{
     GetAllTasks,
     ActiveTask,
     SingleTask,
-    CreateProject
+    CreateProject,
+    Projects,
+    SingleProject,
+    CreateTask
 }

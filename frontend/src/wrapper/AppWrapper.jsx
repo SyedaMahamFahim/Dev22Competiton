@@ -40,11 +40,10 @@ import "react-toastify/dist/ReactToastify.css";
 const LinkItems = [
   { name: "Home", url: "/home", icon: FiHome },
   {
-    name: "All Tasks",
-    url: "/get-all-tasks",
+    name: "All Projects",
+    url: "/projects",
     icon: SiReadthedocs,
   },
-  { name: "Create a Tasks", url: "/add-tasks", icon: RiStickyNoteLine },
   { name: "Create a Project", url: "/create-project", icon: RiStickyNoteLine },
   { name: "Completed Tasks", url: "/completed-tasks", icon: TiTickOutline },
   { name: "Active Tasks", url: "/active-tasks", icon: MdNotificationsActive },

@@ -4,15 +4,23 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import {
   userReducer,
+  userEmailReducer
 } from "./reducers/userReducer";
 
 import {
-  newProjectReducer
+  newProjectReducer,
+  allProjectReducer,
+  projectDetailsReducer,
+  deleteUpdateProductReducer
 } from './reducers/projectReducer'
 
 const reducer = combineReducers({
   user: userReducer,
-  newProject:newProjectReducer
+  userEmail:userEmailReducer,
+  allProjects:allProjectReducer,
+  newProject:newProjectReducer,
+  projectDetails:projectDetailsReducer,
+  deleteUpdateProduct:deleteUpdateProductReducer
 });
 
 

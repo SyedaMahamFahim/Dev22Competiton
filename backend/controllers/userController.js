@@ -31,8 +31,6 @@ exports.register = catchAsyncErrors(async (req, res, next) => {
 exports.login = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
 
-  // checking if user has given password and email both
-
   if (!email || !password) {
     return next(new ErrorHander("Please Enter Email & Password", 400));
   }
@@ -64,5 +62,18 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// Get All User Email
+exports.getAllUsersEmail = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.find()
 
+  const allEmail=[]
+  for (let i = 0; i < user.length; i++) {
+    allEmail.push(user[i].email)
+  }
+
+  res.status(200).json({
+    success: true,
+    allEmail,
+  });
+});
 

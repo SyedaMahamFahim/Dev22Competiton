@@ -49,7 +49,7 @@ const AuthForm = () => {
       myForm.set("password", password);
       myForm.set("avatar", avatar);
 
-      
+
       dispatch(register(myForm));
     } else {
       myForm.set("email", email);
@@ -88,7 +88,7 @@ const AuthForm = () => {
     }
 
     if (isAuthenticated && !signUp) {
-      localStorage.setItem("token", email);
+      // localStorage.setItem("token", email);
       navigate("/home");
     }
 

@@ -10,6 +10,9 @@ import {
     LOAD_USER_FAIL,
     LOGOUT_SUCCESS,
     LOGOUT_FAIL,
+    USERS_EMAIL_REQUEST,
+    USERS_EMAIL_SUCCESS,
+    USERS_EMAIL_FAIL,
     CLEAR_ERRORS,
   } from "../constants/userConstant";
   
@@ -74,77 +77,38 @@ import {
     }
   };
   
-//   export const profileReducer = (state = {}, action) => {
-//     switch (action.type) {
-//       case UPDATE_PROFILE_REQUEST:
-//         return {
-//           ...state,
-//           loading: true,
-//         };
-//       case UPDATE_PROFILE_SUCCESS:
-//       case UPDATE_PASSWORD_SUCCESS:
-//         return {
-//           ...state,
-//           loading: false,
-//           isUpdated: action.payload,
-//         };
-  
-//       case UPDATE_PROFILE_FAIL:
-//       case UPDATE_PASSWORD_FAIL:
+  export const userEmailReducer = (state = { allEmail: [] }, action) => {
+    switch (action.type) {
 
-//         return {
-//           ...state,
-//           loading: false,
-//           error: action.payload,
-//         };
+      case USERS_EMAIL_REQUEST:
+        return {
+          loading: true,
+          isAuthenticated: false,
+        };
+      case USERS_EMAIL_SUCCESS:
+
+        return {
+          ...state,
+          loading: false,
+          allEmail: action.payload,
+        };
   
-//       case UPDATE_PROFILE_RESET:
-//         return {
-//           ...state,
-//           isUpdated: false,
-//         };
-  
-      
-//       case CLEAR_ERRORS:
-//         return {
-//           ...state,
-//           error: null,
-//         };
-  
-//       default:
-//         return state;
-//     }
-//   };
+      case USERS_EMAIL_FAIL:
+        return {
+          ...state,
+          loading: false,
+          allEmail: null,
+          error: action.payload,
+        };
 
   
-//   export const userDetailsReducer = (state = { user: {} }, action) => {
-//     switch (action.type) {
-//       case USER_DETAILS_REQUEST:
-//         return {
-//           ...state,
-//           loading: true,
-//         };
-//       case USER_DETAILS_SUCCESS:
-//         return {
-//           ...state,
-//           loading: false,
-//           user: action.payload,
-//         };
+      case CLEAR_ERRORS:
+        return {
+          ...state,
+          error: null,
+        };
   
-//       case USER_DETAILS_FAIL:
-//         return {
-//           ...state,
-//           loading: false,
-//           error: action.payload,
-//         };
-  
-//       case CLEAR_ERRORS:
-//         return {
-//           ...state,
-//           error: null,
-//         };
-  
-//       default:
-//         return state;
-//     }
-//   };
+      default:
+        return state;
+    }
+  };

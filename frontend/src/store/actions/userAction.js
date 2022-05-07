@@ -10,6 +10,9 @@ import {
     LOAD_USER_FAIL,
     LOGOUT_SUCCESS,
     LOGOUT_FAIL,
+    USERS_EMAIL_REQUEST,
+    USERS_EMAIL_SUCCESS,
+    USERS_EMAIL_FAIL,
     CLEAR_ERRORS,
   } from "../constants/userConstant";
   import axios from "axios";
@@ -21,14 +24,15 @@ import {
       dispatch({ type: LOGIN_REQUEST });
   
       const config = { headers: { "Content-Type": "application/json" } };
-  
+
       const { data } = await axios.post(
-        `${baseUrl}/api/v1/user/login`,
+        `/api/v1/user/login`,
         { email, password },
         config
       );
       dispatch({ type: LOGIN_SUCCESS, payload: data.user });
-    
+      localStorage.setItem("token", data.token);
+
     } catch (error) {
       dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
     }
@@ -41,7 +45,8 @@ import {
   
       const config = { headers: { "Content-Type": "multipart/form-data" } };
   
-      const { data } = await axios.post(`${baseUrl}/api/v1/user/register`,userData,config);
+      // const { data } = await axios.post(`${baseUrl}/api/v1/user/register`,userData,config);
+      const { data } = await axios.post(`/api/v1/user/register`,userData,config);
       dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
     } catch (error) {
       dispatch({
@@ -74,60 +79,18 @@ import {
     }
   };
   
-//   // Update Profile
-//   export const updateProfile = (userData) => async (dispatch) => {
-//     try {
-//       dispatch({ type: UPDATE_PROFILE_REQUEST });
+  // Load User
+  export const allEmailUser = () => async (dispatch) => {
+    try {
+      dispatch({ type: USERS_EMAIL_REQUEST });
   
-//       const config = { headers: { "Content-Type": "multipart/form-data" } };
-  
-//       const { data } = await axios.put(`/api/v1/user/profile/update-info`, userData, config);
-  
-//       dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success });
-//     } catch (error) {
-//       dispatch({
-//         type: UPDATE_PROFILE_FAIL,
-//         payload: error.response.data.message,
-//       });
-//     }
-//   };
-  
-//   // Update Password
-//   export const updatePassword = (passwords) => async (dispatch) => {
-//     try {
-//       dispatch({ type: UPDATE_PASSWORD_REQUEST });
-  
-//       const config = { headers: { "Content-Type": "application/json" } };
-  
-//       const { data } = await axios.put(
-//         `/api/v1/user/profile/password/update-password`,
-//         passwords,
-//         config
-//       );
-  
-//       dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data.success });
-//     } catch (error) {
-//       dispatch({
-//         type: UPDATE_PASSWORD_FAIL,
-//         payload: error.response.data.message,
-//       });
-//     }
-//   };
-  
- 
-//   // get  User Details
-//   export const getUserDetails = (id) => async (dispatch) => {
-//     try {
-//       dispatch({ type: USER_DETAILS_REQUEST });
-//       const { data } = await axios.get(`/api/v1/user/admin/user${id}`);
-  
-//       dispatch({ type: USER_DETAILS_SUCCESS, payload: data.user });
-//     } catch (error) {
-//       dispatch({ type: USER_DETAILS_FAIL, payload: error.response.data.message });
-//     }
-//   };
-  
-  
+      const { data } = await axios.get(`/api/v1/user/get-all-users-email`);
+      dispatch({ type: USERS_EMAIL_SUCCESS, payload: data.allEmail });
+      console.log( data.allEmail)
+    } catch (error) {
+      dispatch({ type: USERS_EMAIL_FAIL, payload: error.response.data.message });
+    }
+  };
   
   // Clearing Errors
   export const clearErrors = () => async (dispatch) => {

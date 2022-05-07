@@ -39,7 +39,7 @@ const taskSchema = new mongoose.Schema({
     required: true,
   },
   project: {
-    type: mongoose.Schema.ObjectId,
+    type: String,
     ref: "Project",
     required: true,
   },
