@@ -1,4 +1,5 @@
 import axios from "axios";
+import baseUrl from "../../configuration/baseUrl";
 import {
   NEW_PROJECT_REQUEST,
   NEW_PROJECT_SUCCESS,
@@ -12,7 +13,9 @@ import {
   PROJECT_DETAILS_FAIL,
   DELETE_PROJECT_REQUEST,
   DELETE_PROJECT_SUCCESS,
-  DELETE_PROJECT_RESET,
+  NEW_TASK_REQUEST,
+  NEW_TASK_SUCCESS,
+  NEW_TASK_FAIL,
   DELETE_PROJECT_FAIL,
 
 } from "../constants/projectConstant";
@@ -102,6 +105,30 @@ export const deleteProject = (id) => async (dispatch) => {
     });
   }
 };
+
+// NEW REVIEW
+export const newTask = (taskData) => async (dispatch) => {
+  try {
+    dispatch({ type: NEW_TASK_REQUEST });
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const { data } = await axios.put(`/api/v1/project/create-task`, taskData, config);
+
+    dispatch({
+      type: NEW_TASK_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: NEW_TASK_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {

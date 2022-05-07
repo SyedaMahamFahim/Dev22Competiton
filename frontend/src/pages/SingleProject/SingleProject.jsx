@@ -10,7 +10,6 @@ import {
   Text,
   Divider,
   Button,
-  Stack
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +23,6 @@ import "react-toastify/dist/ReactToastify.css";
 import dateFormat from "dateformat";
 
 const SingleProject = () => {
-  const [allTask, setAllTask] = useState([])
   const params = useParams();
   const dispatch = useDispatch();
 

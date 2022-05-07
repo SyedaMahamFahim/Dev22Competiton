@@ -5,9 +5,12 @@ import {
   Textarea,
   Select,
   Button,
+  ScaleFade,
   Box,
   Input,
   useColorModeValue,
+  Switch,
+  useDisclosure,
   CircularProgress,
   Center,
 } from "@chakra-ui/react";
@@ -19,24 +22,26 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import {
+  createProject,
   getProjectDetails,
   clearErrors,
   newTask,
 } from "../../store/actions/projectAction";
-import { NEW_TASK_RESET } from "../../store/constants/projectConstant";
-import { LocalizationProvider,DateTimePicker } from '@mui/x-date-pickers';
+import { NEW_PROJECT_RESET } from "../../store/constants/projectConstant";
+
 // import emailjs from '@emailjs-com';
 
-const TaskForm = () => {
+const TaskForm = ({ isNewProject }) => {
+  const { isOpen, onToggle } = useDisclosure();
   const params = useParams();
+  const id = params.id;
   const dispatch = useDispatch();
 
-  const { project, loading, error } = useSelector(
+  const { loading, error, success } = useSelector((state) => state.newProject);
+  const { project, loading: projectLoading, error: projectError } = useSelector(
     (state) => state.projectDetails
   );
-
-  const { success, error: taskError } = useSelector((state) => state.newTask);
-
+  // For Project
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [assignUser, setAssignUser] = useState("");
@@ -68,52 +73,49 @@ const TaskForm = () => {
 
   const createProductSubmitHandler = (e) => {
     e.preventDefault();
+    let today = new Date();
     const myForm = new FormData();
-    if (!loading && project !== null) {
+
+    if (isNewProject) {
       myForm.set("title", title);
       myForm.set("desc", desc);
       myForm.set("nature", nature);
-      myForm.set("projectKey", project.projectKey);
-      myForm.set("projectId", project._id);
+      myForm.set("projectKey", today);
+    } else {
       myForm.set("assignUser", assignUser);
       myForm.set("status", status);
-      myForm.set("startTime", startTime);
-      myForm.set("endTime", endTime);
-      myForm.set("loggingTime", logginTime);
-      dispatch(newTask(myForm));
-     
     }
+
+    dispatch(createProject(myForm));
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error(error, {
-        toastId: "error1",
-        autoClose: 1000,
-      });
-      dispatch(clearErrors());
-    }
-    dispatch(getProjectDetails(params.id));
     getAllUserEmail();
-  }, [dispatch, params.id]);
+    if (isNewProject) {
+      if (error) {
+        toast.error(error, {
+          toastId: "error1",
+          autoClose: 1000,
+        });
+      }
 
-  useEffect(() => {
-    if (taskError) {
-      toast.error(taskError, {
-        toastId: "error1",
-        autoClose: 1000,
-      });
-      dispatch(clearErrors());
+      if (success) {
+        toast.success("Project Created Successfully", {
+          toastId: "success1",
+          autoClose: 1000,
+        });
+        dispatch({ type: NEW_PROJECT_RESET });
+      }
+    } else {
+      console.log(params.id);
+      if (!isNewProject) {
+        dispatch(getProjectDetails(params.id));
+if(!projectLoading){console.log(project);
+  console.log(isNewProject);}
+        
+      }
     }
-    if(success){
-      toast.success("Task Created Successfully", {
-        toastId: "success1",
-        autoClose: 1000,
-      });
-      dispatch({ type: NEW_TASK_RESET });
-    }
-
-  }, [dispatch,taskError,success]);
+  }, [dispatch, error, success]);
 
   return (
     <>
@@ -137,7 +139,8 @@ const TaskForm = () => {
             >
               <FormControl mt={5} isRequired>
                 <FormLabel htmlFor="title">
-                  Task Title
+                  {isNewProject ? "Project " : "Task "}
+                  Title
                 </FormLabel>
                 <Input
                   id="title"
@@ -169,7 +172,8 @@ const TaskForm = () => {
                 </Select>
               </FormControl>
 
-       
+              {!isNewProject && (
+                <>
                   <FormControl mt={5} isRequired>
                     <FormLabel htmlFor="status">Status</FormLabel>
                     <Select
@@ -182,11 +186,16 @@ const TaskForm = () => {
                       <option value={"pending"}>Pending</option>
                     </Select>
                   </FormControl>
-                
-                    
+                  <FormControl display="flex" alignItems="center" mt={8}>
+                    <FormLabel htmlFor="is-assign" mb="0">
+                      Want to assign this task to someone?
+                    </FormLabel>
+                    <Switch id="is-assign" onChange={onToggle} />
+                  </FormControl>
+                  <ScaleFade initialScale={0.9} in={isOpen}>
                     <FormControl mt={5}>
                       <FormLabel htmlFor="assign-user">
-                        Assign Team Mate.
+                        Select his/her email.
                       </FormLabel>
 
                       <Select
@@ -196,18 +205,16 @@ const TaskForm = () => {
                         onChange={(e) => setAssignUser(e.target.value)}
                       >
                         {allUsersEmail.map((val) => (
-                          <option key={val + 1} value={val}>
+                          <option key={val} value={val}>
                             {val}
                           </option>
                         ))}
                       </Select>
                     </FormControl>
-                   
-                 
-                
-                    
-                 
-               
+                  </ScaleFade>
+                </>
+              )}
+
               <Button
                 type="submit"
                 mt={5}
@@ -229,6 +236,8 @@ const TaskForm = () => {
               >
                 {loading ? (
                   <CircularProgress isIndeterminate color="gray.50" />
+                ) : isNewProject ? (
+                  "Create Project"
                 ) : (
                   "Create Task"
                 )}

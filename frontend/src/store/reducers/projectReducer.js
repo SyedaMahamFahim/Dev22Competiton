@@ -13,6 +13,10 @@ import {
   DELETE_PROJECT_SUCCESS,
   DELETE_PROJECT_RESET,
   DELETE_PROJECT_FAIL,
+  NEW_TASK_REQUEST,
+  NEW_TASK_SUCCESS,
+  NEW_TASK_FAIL,
+  NEW_TASK_RESET,
   CLEAR_ERRORS,
 } from "../constants/projectConstant";
 
@@ -131,6 +135,40 @@ export const deleteUpdateProductReducer = (state = {}, action) => {
         isDeleted: false,
       };
 
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// New Task Reducer
+export const newTaskReducer = (state = {}, action) => {
+  switch (action.type) {
+    case NEW_TASK_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case NEW_TASK_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload,
+      };
+    case NEW_TASK_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case NEW_TASK_RESET:
+      return {
+        ...state,
+        success: false,
+      };
     case CLEAR_ERRORS:
       return {
         ...state,
