@@ -98,3 +98,20 @@ exports.createTask = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+// Create Task
+// Get Single Task
+exports.getSingleTask = catchAsyncErrors(async (req, res, next) => {
+  let project = await Project.findById(req.params.id);
+
+ 
+  if (!project) {
+    return next(new ErrorHander("Project not found", 404));
+  }
+  let task = project.tasks.filter((task)=>{if(task._id==req.params.taskId){return task}});
+
+
+  res.status(200).json({
+    success: true,
+    task
+  });
+});

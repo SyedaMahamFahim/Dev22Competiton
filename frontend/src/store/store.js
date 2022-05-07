@@ -12,7 +12,8 @@ import {
   allProjectReducer,
   projectDetailsReducer,
   deleteUpdateProductReducer,
-  newTaskReducer
+  newTaskReducer,
+  taskDetailsReducer
 } from './reducers/projectReducer'
 
 const reducer = combineReducers({
@@ -22,7 +23,8 @@ const reducer = combineReducers({
   newProject:newProjectReducer,
   projectDetails:projectDetailsReducer,
   deleteUpdateProduct:deleteUpdateProductReducer,
-  newTask:newTaskReducer
+  newTask:newTaskReducer,
+  taskDetails:taskDetailsReducer
 });
 
 

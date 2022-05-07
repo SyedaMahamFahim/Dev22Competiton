@@ -87,7 +87,7 @@ const Projects = () => {
       minWidth: 50,
       flex: 0.3,
     },
-    {
+     {
       field: "tasks",
       headerName: "Tasks",
       type: "number",

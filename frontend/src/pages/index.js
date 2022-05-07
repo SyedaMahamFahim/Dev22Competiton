@@ -14,7 +14,7 @@ import Projects from "./Projects/Projects";
 import SingleProject from  './SingleProject/SingleProject'
 import CreateTask from "./CreateTask/CreateTask";
 import Tasks from './Tasks/Tasks';
-
+import TileProjects from "./TileProjects/TileProjects";
 export{
     LoginSignup,
     Home,
@@ -31,5 +31,6 @@ export{
     Projects,
     SingleProject,
     CreateTask,
-    Tasks
+    Tasks,
+    TileProjects
 }

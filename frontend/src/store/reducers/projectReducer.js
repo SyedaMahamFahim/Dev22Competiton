@@ -17,6 +17,9 @@ import {
   NEW_TASK_SUCCESS,
   NEW_TASK_FAIL,
   NEW_TASK_RESET,
+  TASK_DETAILS_REQUEST,
+  TASK_DETAILS_SUCCESS,
+  TASK_DETAILS_FAIL,
   CLEAR_ERRORS,
 } from "../constants/projectConstant";
 
@@ -169,6 +172,34 @@ export const newTaskReducer = (state = {}, action) => {
         ...state,
         success: false,
       };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+// Get Single Task Details
+export const taskDetailsReducer = (state = { task: {} }, action) => {
+  switch (action.type) {
+    case TASK_DETAILS_REQUEST:
+      return {
+        loading: true,
+      };
+    case TASK_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        task: action.payload,
+      };
+    case TASK_DETAILS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
     case CLEAR_ERRORS:
       return {
         ...state,

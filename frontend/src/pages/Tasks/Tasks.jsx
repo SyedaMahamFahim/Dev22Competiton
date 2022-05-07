@@ -3,21 +3,18 @@ import AppWrapper from "../../wrapper/AppWrapper";
 import { SectionTitle } from "../../components/index";
 import { Box } from "@chakra-ui/react";
 import dateFormat from "dateformat";
-import { AiFillDelete, AiOutlineLink, AiFillProject } from "react-icons/ai";
+import {AiOutlineLink, AiFillProject } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 
 import { DataGrid } from "@material-ui/data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import {
   clearErrors,
-  getProjects,
   getProjectDetails,
-  deleteProject,
 } from "../../store/actions/projectAction";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { DELETE_PROJECT_RESET } from "../../store/constants/projectConstant";
 
 import { CircularProgress, Center } from "@chakra-ui/react";
 const Tasks = () => {
@@ -64,7 +61,6 @@ const Tasks = () => {
     );
   }
 
-  console.log("row", rows);
 
   const columns = [
 
@@ -85,13 +81,13 @@ const Tasks = () => {
       field: "loggingTime",
       headerName: "Logging Time",
       minWidth: 100,
-      flex: 0.5,
+      flex: 0.4,
     },
     {
       field: "status",
       headerName: "Status",
       minWidth: 100,
-      flex: 0.5,
+      flex: 0.4,
     },
     {
       field: "natureOfTask",
@@ -103,7 +99,7 @@ const Tasks = () => {
       field: "createdAt",
       headerName: "Created At",
       minWidth: 100,
-      flex: 0.4,
+      flex: 0.3,
     },
     {
       field: "actions",
@@ -112,11 +108,11 @@ const Tasks = () => {
       minWidth: 150,
       type: "number",
       sortable: false,
-      renderCell: (params) => {
+      renderCell: (cellValues) => {
         return (
           <>
             <Link
-              to={`/${params.id}/task/`}
+              to={`/project/${params.id}/task/${cellValues.row.id}`}
               style={{
                 fontSize: "25px",
                 margin: "5px",
@@ -124,6 +120,16 @@ const Tasks = () => {
               }}
             >
               <AiOutlineLink />
+            </Link>
+            <Link
+              to={`/project/${params.id}/task/${cellValues.row.id}`}
+              style={{
+                fontSize: "25px",
+                margin: "5px",
+                color: "#1A202C",
+              }}
+            >
+              <AiFillProject />
             </Link>
           </>
         );

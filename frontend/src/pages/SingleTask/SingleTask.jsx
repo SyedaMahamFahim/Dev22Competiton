@@ -8,41 +8,44 @@ import {
   Heading,
   useColorModeValue,
   Text,
-  Divider
+  Divider,
+  Button,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import todoUrl from "../../configuration/todoUrl";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearErrors,
+  getTaskDetails,
+} from "../../store/actions/projectAction";
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dateFormat from "dateformat";
 
 const SingleTask = () => {
   const params = useParams();
-  const id = params.id;
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState("");
+  const dispatch = useDispatch();
 
-  const getTaskData = async () => {
-    setLoading(true);
-    await axios
-      .get(`${todoUrl}/api/v1/todo-controllers/get-todo/${id}`)
-      .then(({ data: { todo } }) => {
-        setData(todo);
-        setLoading(false);
-      })
-      .catch((err) => {
-        toast.error(err.message, {
-          autoClose: 1000,
-          toastId: "todoerror1",
-        });
-      });
-  };
+  const {loading, error } = useSelector(
+    (state) => state.getTaskDetails
+  );
 
   useEffect(() => {
-    getTaskData();
-    console.log(data);
-  }, []);
+    if (error) {
+      toast.error(error, {
+        toastId: "error1",
+        autoClose: 1000,
+      });
+      dispatch(clearErrors());
+    }
+
+    dispatch(getTaskDetails(params.id,params.taskId));
+  }, [dispatch, params.id,params.taskId]);
+  // let allTaskArry = [];
+  // if (!loading) {
+  //   allTaskArry = project.tasks || [];
+  // }
+  // console.log("allTaskArry", allTaskArry.length);
 
   return (
     <>
@@ -50,17 +53,22 @@ const SingleTask = () => {
       {loading ? (
         <Center h="50vh">
           {" "}
-          <CircularProgress isIndeterminate color="black" size={"3rem"} />
+          <CircularProgress isIndeterminate color="black" size={"6rem"} />
         </Center>
       ) : (
         <>
-        {console.log(data)}
-          <SectionTitle
-            text={data.title}
+         <SectionTitle
+            text={"project.title"}
+            align="center"
+            variant="h1"
+            subText={`Created At `}
+            />
+           {/* <SectionTitle
+            text={project.title}
             align="center"
             variant="h1"
             subText={`Created At 
-       ${dateFormat(data.createdAt, "dddd, mmmm dS, yyyy,")}`}
+       ${dateFormat(project.createdAt, "dddd, mmmm dS, yyyy,")}`} 
           />
           <Box
             bg={useColorModeValue("white", "gray.900")}
@@ -69,54 +77,56 @@ const SingleTask = () => {
             p={6}
           >
             <Box>
+              <Heading>Project Id</Heading>
+              <Text fontWeight={600} color={"gray.500"} my={4}>
+                {project._id}
+              </Text>
+            </Box>
+            <Divider />
+            <Box my={4}>
               <Heading>Title</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {data.title}
+                {project.title}
               </Text>
             </Box>
-            <Divider/>
-            <Box mt={'1.75rem'}>
-              <Heading>Description</Heading>
+            <Divider />
+            <Box mt={"1.75rem"}>
+              <Heading>Project Key</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {data.desc}
+                {project.projectKey}
               </Text>
             </Box>
-            <Divider/>
-            <Box mt={'1.75rem'}>
-              <Heading>Status</Heading>
+            <Divider />
+            <Box mt={"1.75rem"}>
+              <Heading>Total Tasks</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {data.status}
-              </Text>
-            </Box>
-            
-            <Divider/>
-            <Box mt={'1.75rem'}>
-              <Heading>Tag</Heading>
-              <Text fontWeight={600} color={"gray.500"} my={4}>
-                {data.tag}
+                {!loading && allTaskArry.length}
               </Text>
             </Box>
 
-            <Divider/>
-            <Box mt={'1.75rem'}>
-              <Heading>Assignee User</Heading>
-              <Text fontWeight={600} color={"gray.500"} my={4}>
-                {data.assignUserEmailAddress}
-              </Text>
-            </Box>
-            
-            {
-              data.assignUserEmailAddress !== 'none' && <>
-              <Divider/>
-              <Box mt={'1.75rem'}>
-                <Heading>Assigned By</Heading>
-                <Text fontWeight={600} color={"gray.500"} my={4}>
-                  {data.emailAddress}
-                </Text>
-              </Box>
-              </>
-            }
-          </Box>
+            <Button
+              type="submit"
+              bg={"blue.400"}
+              color={"white"}
+              _hover={{
+                bg: "blue.500",
+              }}
+              mr={5}
+              // onClick={loginForm}
+            >
+              <Link to={`/${project._id}/all-tasks`}>View All Tasks</Link>
+            </Button>
+            <Button
+              type="submit"
+              bg={"blue.400"}
+              color={"white"}
+              _hover={{
+                bg: "blue.500",
+              }}
+            >
+              <Link to={`/${project._id}/create-task`}>Create New Task</Link>
+            </Button>
+          </Box> */}
         </>
       )}
     </>

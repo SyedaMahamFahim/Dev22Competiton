@@ -1,6 +1,6 @@
 const express = require("express");
 const { createProject,createTask ,getProjectDetail,getAllProjects,deleteProject,
-    updateProject} = require("../controllers/projectController");
+    getSingleTask } = require("../controllers/projectController");
 const { isAuthenticatedUser } = require("../middleware/auth");
 const { sendEmail } = require("../utils/sendEmail");
 
@@ -13,6 +13,8 @@ router.route("/project/:id")
 
 router.route("/send-email").post(sendEmail);
 
+router.route("/project/:id/task/:taskId")
+.get(isAuthenticatedUser, getSingleTask)
 
 router.route("/projects/").get(isAuthenticatedUser, getAllProjects);
 

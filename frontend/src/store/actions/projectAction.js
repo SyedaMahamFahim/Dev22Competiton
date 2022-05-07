@@ -17,7 +17,9 @@ import {
   NEW_TASK_SUCCESS,
   NEW_TASK_FAIL,
   DELETE_PROJECT_FAIL,
-
+  TASK_DETAILS_REQUEST,
+  TASK_DETAILS_SUCCESS,
+  TASK_DETAILS_FAIL,
 } from "../constants/projectConstant";
 
 
@@ -130,6 +132,25 @@ export const newTask = (taskData) => async (dispatch) => {
 };
 
 
+// Get Single Project Details
+
+export const getTaskDetails = (id,taskId) => async (dispatch) => {
+  try {
+    dispatch({ type: TASK_DETAILS_REQUEST });
+
+    const { data } = await axios.get(`/api/v1/project/project/${id}/task/${taskId}`);
+    console.log(data)
+    dispatch({
+      type: TASK_DETAILS_SUCCESS,
+      payload: data.task,
+    });
+  } catch (error) {
+    dispatch({
+      type: TASK_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
