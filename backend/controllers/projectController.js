@@ -58,19 +58,38 @@ exports.deleteProject = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Updated Project
-exports.updateProject = catchAsyncErrors(async (req, res, next) => {
-  let project = await Project.findById(req.params.id);
 
-  if (!project) {
-    return next(new ErrorHander("Project not found", 404));
-  }
 
-  project = await Project.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+// Create Task
+exports.createTask = catchAsyncErrors(async (req, res, next) => {
+  const {
+    taskTitle,
+    assigneUser,
+    description,
+    natureOfTask,
+    status,
+    startTime,
+    endTime,
+    loggingTime,
+    projectId,
+  } = req.body;
+
+  let project = await Project.findById(projectId);
+
+  console.log(project.tasks);
+  const task = {
+    taskTitle,
+    assigneUser:JSON.parse(assigneUser),
+    description,
+    natureOfTask,
+    status,
+    startTime,
+    endTime,
+    loggingTime,
+  };
+  project.tasks.push(task);
+
+  await project.save({ validateBeforeSave: false });
 
   res.status(200).json({
     success: true,
@@ -78,83 +97,4 @@ exports.updateProject = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Create Task
-exports.createTask = catchAsyncErrors(async (req, res, next) => {
-  const {
-    taskTitle,
-    description,
-    natureOfTask,
-    status,
-    startTime,
-    endTime,
-    loggingTime,
-    projectId,
-  } = req.body;
-  
-  let project = await Project.findById(projectId);
 
-
-
-  // project.tasks.assigneUser.push(assigneUser);
- console.log(project.tasks)
-  const task = {
-    taskTitle,
-    assigneUser:[],
-    description,
-    natureOfTask,
-    status,
-    startTime,
-    endTime,
-    loggingTime,
-  };
-
-
-  project.tasks.push(task);
-
-  await project.save({ validateBeforeSave: false });
-
-  res.status(200).json({
-    success: true,
-    project
-  });
-});
-
-
-// Create Task
-exports.assignUser = catchAsyncErrors(async (req, res, next) => {
-  const {
-    userEmail,
-    userRole,
-    projectId,
-  } = req.body;
-  
-  let project = await Project.findById(projectId);
-
-
-
-  // project.tasks.assigneUser.push(assigneUser);
- console.log(project.tasks)
-  const task = {
-    taskTitle,
-    assigneUser:{
-      userEmail,
-      userRole,
-    },
-    description,
-    natureOfTask,
-    status,
-    startTime,
-    endTime,
-    loggingTime,
-  };
-
-
-  project.tasks.push(task);
-
-  await project.save({ validateBeforeSave: false });
-
-  res.status(200).json({
-    success: true,
-    project
-  });
-});

@@ -17,18 +17,7 @@ const projectSchema = new mongoose.Schema({
   },
   tasks: [
     {
-      // assigneUser: [
-      //   {
-      //     userEmail: {
-      //       type: String,
-      //       required: true,
-      //     },
-      //     userRole: {
-      //       type: String,
-      //       required: true,
-      //     },
-      //   },
-      // ],
+
       assigneUser: [],
       taskTitle: {
         type: String,

@@ -9,7 +9,8 @@ router.route("/create-project").post(isAuthenticatedUser, createProject);
 router.route("/project/:id")
 .get(isAuthenticatedUser, getProjectDetail)
 .delete(isAuthenticatedUser, deleteProject)
-.put(isAuthenticatedUser, updateProject)
+
+
 
 router.route("/projects/").get(isAuthenticatedUser, getAllProjects);
 

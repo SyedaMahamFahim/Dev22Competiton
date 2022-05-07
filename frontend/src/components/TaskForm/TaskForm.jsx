@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { MultiSelect } from "react-multi-select-component";
 import {
   FormControl,
   FormLabel,
@@ -34,7 +33,6 @@ import {
   newTask,
 } from "../../store/actions/projectAction";
 import { NEW_TASK_RESET } from "../../store/constants/projectConstant";
-// import emailjs from '@emailjs-com';
 
 const TaskForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,8 +47,6 @@ const TaskForm = () => {
   );
 
   const { success, error: taskError } = useSelector((state) => state.newTask);
-  let allEmails = [];
-  let allAssignMembers=[]
   const [allMembers, setAllMembers] = useState([]);
 
   const [taskTitle, setTitle] = useState("");
@@ -64,7 +60,6 @@ const TaskForm = () => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [userRole, setUserRole] = useState("");
-  const [userEmail, setUserEmail] = useState([]);
 
   const [loggingTime, setLoggingTime] = useState("10pm");
 
@@ -88,12 +83,10 @@ const TaskForm = () => {
 
   const taskSubmitHandler = (e) => {
     e.preventDefault();
-    console.log("allEmails", allEmails);
-    const allSelectedEmail = [];
-    allEmails.map((val) => allSelectedEmail.push(val.value));
-    console.log(allSelectedEmail);
+   
     const myForm = new FormData();
     if (!loading && project !== null) {
+      console.log(allMembers)
       myForm.set("taskTitle", taskTitle);
       myForm.set("description", description);
       myForm.set("natureOfTask", natureOfTask);
@@ -103,7 +96,7 @@ const TaskForm = () => {
       myForm.set("status", status);
       myForm.set("startTime", startTime);
       myForm.set("endTime", "none");
-      myForm.set("assigneUser", allMembers);
+      myForm.set("assigneUser", JSON.stringify(allMembers));
 
 
       myForm.set("loggingTime", "0");
@@ -133,7 +126,7 @@ const TaskForm = () => {
     }
     if (success) {
       toast.success("Task Created Successfully", {
-        toastId: "success",
+        toastId: "success1",
         autoClose: 1000,
       });
       dispatch({ type: NEW_TASK_RESET });
@@ -152,11 +145,6 @@ const TaskForm = () => {
 
   
 
-
-
-  useEffect(() => {
-    allEmails = assignUser;
-  }, [assignUser]);
 
   return (
     <>
@@ -227,8 +215,7 @@ const TaskForm = () => {
               <FormControl mt={5} isRequired>
                 <FormLabel>Assign Task </FormLabel>
                 <Button
-                  type="submit"
-                  mt={5}
+                    mt={5}
                   flex={1}
                   fontSize={"sm"}
                   rounded={"full"}
@@ -250,17 +237,12 @@ const TaskForm = () => {
                  
                 </Button>
               </FormControl>
-
-              <FormControl mt={5} isRequired>
-                <FormLabel htmlFor="assign-user">Assign Team Mate.</FormLabel>
-
-                <MultiSelect
-                  options={allUsersEmail}
-                  value={assignUser}
-                  onChange={setAssignUser}
-                  labelledBy="Select"
-                />
-              </FormControl>
+              <Box>
+                All Selected User
+                {
+                  allMembers.map((val)=>val.userEmail)
+                }
+              </Box>
 
               <FormControl mt={5}>
                 <FormLabel htmlFor="assign-user">Start Time</FormLabel>
