@@ -13,6 +13,8 @@ import CreateProject from "./CreateProject/CreateProject";
 import Projects from "./Projects/Projects";
 import SingleProject from  './SingleProject/SingleProject'
 import CreateTask from "./CreateTask/CreateTask";
+import Tasks from './Tasks/Tasks';
+
 export{
     LoginSignup,
     Home,
@@ -28,5 +30,6 @@ export{
     CreateProject,
     Projects,
     SingleProject,
-    CreateTask
+    CreateTask,
+    Tasks
 }

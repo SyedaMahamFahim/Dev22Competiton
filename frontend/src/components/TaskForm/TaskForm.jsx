@@ -36,7 +36,7 @@ import { NEW_TASK_RESET } from "../../store/constants/projectConstant";
 
 const TaskForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+
   const initialRef = React.useRef();
   const finalRef = React.useRef();
   const params = useParams();
@@ -81,12 +81,37 @@ const TaskForm = () => {
       });
   };
 
+    // Send Email
+    const sendEmail = async () => {
+   
+      let dataSend = {
+        email: assignUserTask,
+        subject: "no-reply",
+        message: "Project key",
+      };
+      console.log(dataSend);
+      const res = await fetch(`${baseUrl}/api/v1/project/send-email`, {
+        method: "POST",
+        body: JSON.stringify(dataSend),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        // HANDLING ERRORS
+        .then((res) => {
+          console.log(res);
+          if (res.status > 199 && res.status < 300) {
+            alert("Send Successfully !");
+          }
+        });
+    };
   const taskSubmitHandler = (e) => {
     e.preventDefault();
-   
+
     const myForm = new FormData();
     if (!loading && project !== null) {
-      console.log(allMembers)
+      console.log(allMembers);
       myForm.set("taskTitle", taskTitle);
       myForm.set("description", description);
       myForm.set("natureOfTask", natureOfTask);
@@ -98,9 +123,9 @@ const TaskForm = () => {
       myForm.set("endTime", "none");
       myForm.set("assigneUser", JSON.stringify(allMembers));
 
-
       myForm.set("loggingTime", "0");
       dispatch(newTask(myForm));
+      sendEmail();
     }
   };
 
@@ -134,16 +159,14 @@ const TaskForm = () => {
   }, [dispatch, taskError, success]);
 
   const addMembers = () => {
- 
-   let memberInfo={
-    userRole: userRole,
-    userEmail: assignUserTask,
-  }
-    setAllMembers([...allMembers,memberInfo])
-    onClose()
+    let memberInfo = {
+      userRole: userRole,
+      userEmail: assignUserTask,
+    };
+    setAllMembers([...allMembers, memberInfo]);
+    onClose();
   };
 
-  
 
 
   return (
@@ -215,7 +238,7 @@ const TaskForm = () => {
               <FormControl mt={5} isRequired>
                 <FormLabel>Assign Task </FormLabel>
                 <Button
-                    mt={5}
+                  mt={5}
                   flex={1}
                   fontSize={"sm"}
                   rounded={"full"}
@@ -232,16 +255,12 @@ const TaskForm = () => {
                   }}
                   onClick={onOpen}
                 >
-                  
-                    Add Member
-                 
+                  Add Member
                 </Button>
               </FormControl>
               <Box>
                 All Selected User
-                {
-                  allMembers.map((val)=>val.userEmail)
-                }
+                {allMembers.map((val) => val.userEmail)}
               </Box>
 
               <FormControl mt={5}>
@@ -330,9 +349,7 @@ const TaskForm = () => {
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="blue" mr={3}
-                onClick={addMembers}
-                >
+                <Button colorScheme="blue" mr={3} onClick={addMembers}>
                   Save
                 </Button>
                 <Button onClick={onClose}>Cancel</Button>

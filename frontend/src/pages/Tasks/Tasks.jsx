@@ -4,12 +4,14 @@ import { SectionTitle } from "../../components/index";
 import { Box } from "@chakra-ui/react";
 import dateFormat from "dateformat";
 import { AiFillDelete, AiOutlineLink, AiFillProject } from "react-icons/ai";
+import { useParams } from "react-router-dom";
 
 import { DataGrid } from "@material-ui/data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import {
   clearErrors,
   getProjects,
+  getProjectDetails,
   deleteProject,
 } from "../../store/actions/projectAction";
 import { ToastContainer, toast } from "react-toastify";
@@ -18,19 +20,13 @@ import { Link } from "react-router-dom";
 import { DELETE_PROJECT_RESET } from "../../store/constants/projectConstant";
 
 import { CircularProgress, Center } from "@chakra-ui/react";
-const Projects = () => {
+const Tasks = () => {
   const dispatch = useDispatch();
-  const { loading, error, projects } = useSelector(
-    (state) => state.allProjects
-  );
+  const params = useParams();
 
-  const { error: deleteError, isDeleted } = useSelector(
-    (state) => state.deleteUpdateProduct
+  const { project, loading, error } = useSelector(
+    (state) => state.projectDetails
   );
-
-  const deleteProductHandler = (id) => {
-    dispatch(deleteProject(id));
-  };
 
   useEffect(() => {
     if (error) {
@@ -41,64 +37,73 @@ const Projects = () => {
       dispatch(clearErrors());
     }
 
-    if (deleteError) {
-      toast.error(error, {
-        toastId: "error1",
-        autoClose: 1000,
-      });
-      dispatch(clearErrors());
-    }
+    dispatch(getProjectDetails(params.id));
+  }, [dispatch, params.id]);
 
-    if (isDeleted) {
-      const confirmation = window.confirm("Do you want to delete the product?");
-      if (confirmation) {
-        toast.success("Project Deleted Successfully", {
-          toastId: "error2",
-          autoClose: 1000,
-        });
+  console.log(project);
 
-        dispatch({ type: DELETE_PROJECT_RESET });
-      }
-    }
+  let allTaskArry = [];
+  if (!loading) {
+    allTaskArry = project.tasks || [];
+  }
+  const rows = [];
 
-    dispatch(getProjects());
-  }, [dispatch, alert, error, deleteError, isDeleted]);
+  if (allTaskArry.length > 0) {
+    console.log("allTaskArry", allTaskArry);
+    allTaskArry.map((item) =>
+      rows.push({
+        id: item._id,
+        taskTitle: item.taskTitle,
+        status: item.status,
+        loggingTime: item.loggingTime,
+        natureOfTask: item.natureOfTask,
+        assigneUser:item.assigneUser.length || 0,
+        createdAt: dateFormat(item.createdAt, "dd, mmmm, yyyy"),
+        view:item._id
+      })
+    );
+  }
+
+  console.log("row", rows);
 
   const columns = [
-    { field: "id", headerName: "Project ID", minWidth: 200, flex: 0.5 },
 
     {
-      field: "title",
+      field: "taskTitle",
       headerName: "Title",
+      minWidth: 100,
+      flex: 0.25,
+    },
+    {
+      field: "assigneUser",
+      headerName: "Assignee",
+      type: "number",
+      minWidth: 50,
+      flex: 0.3,
+    },
+    {
+      field: "loggingTime",
+      headerName: "Logging Time",
       minWidth: 100,
       flex: 0.5,
     },
-
     {
-      field: "projectKey",
-      headerName: "Project Key",
+      field: "status",
+      headerName: "Status",
       minWidth: 100,
-      flex: 0.4,
+      flex: 0.5,
     },
     {
-      field: "tasks",
-      headerName: "Tasks",
-      type: "number",
-      minWidth: 50,
-      flex: 0.3,
-    },
-    {
-      field: "tasks",
-      headerName: "Tasks",
-      type: "number",
-      minWidth: 50,
-      flex: 0.3,
+      field: "natureOfTask",
+      headerName: "Nature Of Task",
+      minWidth: 100,
+      flex: 0.5,
     },
     {
       field: "createdAt",
       headerName: "Created At",
       minWidth: 100,
-      flex: 0.3,
+      flex: 0.4,
     },
     {
       field: "actions",
@@ -110,10 +115,8 @@ const Projects = () => {
       renderCell: (params) => {
         return (
           <>
-           
-
             <Link
-              to={`/project/${params.id}`}
+              to={`/${params.id}/task/`}
               style={{
                 fontSize: "25px",
                 margin: "5px",
@@ -122,49 +125,12 @@ const Projects = () => {
             >
               <AiOutlineLink />
             </Link>
-
-            <button
-              className="btn btn-danger"
-              color="white"
-              style={{
-                fontSize: "25px",
-                margin: "5px",
-                color: "#1A202C",
-              }}
-              onClick={() =>
-                deleteProductHandler(params.getValue(params.id, "id"))
-              }
-            >
-              <AiFillDelete />
-            </button>
           </>
         );
       },
     },
   ];
-  const rows = [];
-  let totalAssignUser=0
-  projects &&
-    projects.forEach((item) => {
-    
-      
-      item.tasks &&
-      item.tasks.forEach((val)=>{
-        totalAssignUser+=val.assigneUser.length
-      })
-
-      rows.push({
-        id: item._id,
-        title: item.title.slice(0, 15),
-        projectKey: item.projectKey,
-        tasks: item.tasks.length,
-        totalAssignUser:totalAssignUser,
-        createdAt: dateFormat(item.createdAt, "dd, mmmm, yyyy"),
-      });
-
-    });
-    console.log(totalAssignUser)
-
+ 
 
   return (
     <>
@@ -177,10 +143,10 @@ const Projects = () => {
       ) : (
         <>
           <SectionTitle
-            text={"Projects"}
+            text={"All Tasks"}
             align="center"
             variant="h1"
-            subText={"All your created or assigned projects"}
+            subText={project.title}
           />
           <Box
             mt={{ base: "2rem" }}
@@ -202,4 +168,4 @@ const Projects = () => {
   );
 };
 
-export default AppWrapper(Projects);
+export default AppWrapper(Tasks);

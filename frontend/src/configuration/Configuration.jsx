@@ -15,7 +15,8 @@ import {
   CreateProject,
   Projects,
   SingleProject,
-  CreateTask
+  CreateTask,
+  Tasks
 } from "../pages/index";
 import PrivateRoute from "./PrivateRoute";
 const Configuration = () => {
@@ -52,6 +53,14 @@ const Configuration = () => {
           element={
             <PrivateRoute>
               <SingleProject/>
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="/:id/all-tasks"
+          element={
+            <PrivateRoute>
+              <Tasks/>
             </PrivateRoute>
           }
         />
