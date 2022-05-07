@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AppWrapper from "../../wrapper/AppWrapper";
 import { SectionTitle } from "../../components/index";
 import {
@@ -30,7 +30,6 @@ const SingleProject = () => {
     (state) => state.projectDetails
   );
 
-  
   useEffect(() => {
     if (error) {
       toast.error(error, {
@@ -39,19 +38,14 @@ const SingleProject = () => {
       });
       dispatch(clearErrors());
     }
-   
-    
-    
-    
-    dispatch(getProjectDetails(params.id));
-  
-  }, [dispatch, params.id]);
-  let allTaskArry=[]
-  if(!loading){
-    allTaskArry=project.tasks || []
 
+    dispatch(getProjectDetails(params.id));
+  }, [dispatch, params.id]);
+  let allTaskArry = [];
+  if (!loading) {
+    allTaskArry = project.tasks || [];
   }
-  console.log("allTaskArry",allTaskArry.length)
+  console.log("allTaskArry", allTaskArry.length);
 
   return (
     <>
@@ -63,7 +57,6 @@ const SingleProject = () => {
         </Center>
       ) : (
         <>
-        
           <SectionTitle
             text={project.title}
             align="center"
@@ -101,40 +94,32 @@ const SingleProject = () => {
             <Box mt={"1.75rem"}>
               <Heading>Total Tasks</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-{!loading && allTaskArry.length }
+                {!loading && allTaskArry.length}
               </Text>
             </Box>
-            
+
             <Button
-                    type="submit"
-                    bg={"blue.400"}
-                    color={"white"}
-                    _hover={{
-                      bg: "blue.500",
-                    }}
-                    mr={5}
-                    // onClick={loginForm}
-                  >
-                    <Link to={`/${project._id}/all-tasks`}>
-                    View All Tasks
-                    </Link>
-                    
-                  </Button>
-                  <Button
-                    type="submit"
-                    bg={"blue.400"}
-                    color={"white"}
-                    _hover={{
-                      bg: "blue.500",
-                    }}
-                  >
-                    <Link to={`/${project._id}/create-task`}>
-                    Create New Task
-                    </Link>
-                    
-                  </Button>
-            
-          
+              type="submit"
+              bg={"blue.400"}
+              color={"white"}
+              _hover={{
+                bg: "blue.500",
+              }}
+              mr={5}
+              // onClick={loginForm}
+            >
+              <Link to={`/${project._id}/all-tasks`}>View All Tasks</Link>
+            </Button>
+            <Button
+              type="submit"
+              bg={"blue.400"}
+              color={"white"}
+              _hover={{
+                bg: "blue.500",
+              }}
+            >
+              <Link to={`/${project._id}/create-task`}>Create New Task</Link>
+            </Button>
           </Box>
         </>
       )}

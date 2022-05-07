@@ -68,7 +68,11 @@ exports.getAllUsersEmail = catchAsyncErrors(async (req, res, next) => {
 
   const allEmail=[]
   for (let i = 0; i < user.length; i++) {
-    allEmail.push(user[i].email)
+    let userEmail={
+      label:user[i].email,
+      value:user[i].email
+    }
+    allEmail.push(userEmail)
   }
 
   res.status(200).json({

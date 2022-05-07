@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { MultiSelect } from "react-multi-select-component";
 import {
   FormControl,
   FormLabel,
@@ -10,6 +11,14 @@ import {
   useColorModeValue,
   CircularProgress,
   Center,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import axios from "axios";
 import baseUrl from "../../configuration/baseUrl";
@@ -17,6 +26,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import DateTimePicker from "react-datetime-picker";
 
 import {
   getProjectDetails,
@@ -24,10 +34,13 @@ import {
   newTask,
 } from "../../store/actions/projectAction";
 import { NEW_TASK_RESET } from "../../store/constants/projectConstant";
-import { LocalizationProvider,DateTimePicker } from '@mui/x-date-pickers';
 // import emailjs from '@emailjs-com';
 
 const TaskForm = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
+  const initialRef = React.useRef();
+  const finalRef = React.useRef();
   const params = useParams();
   const dispatch = useDispatch();
 
@@ -36,19 +49,26 @@ const TaskForm = () => {
   );
 
   const { success, error: taskError } = useSelector((state) => state.newTask);
+  let allEmails = [];
+  let allAssignMembers=[]
+  const [allMembers, setAllMembers] = useState([]);
 
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [assignUser, setAssignUser] = useState("");
+  const [taskTitle, setTitle] = useState("");
+  const [description, setDesc] = useState("");
+  const [assignUser, setAssignUser] = useState([]);
+  const [assignUserTask, setAssignUserTask] = useState("");
 
   // For Task
   const [allUsersEmail, setAllUsersEmail] = useState([]);
 
-  const [startTime, setStartTime] = useState("9pm");
-  const [endTime, setEndTime] = useState("10pm");
-  const [logginTime, setLogginTime] = useState("10pm");
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [userRole, setUserRole] = useState("");
+  const [userEmail, setUserEmail] = useState([]);
 
-  const [nature, setNature] = useState("");
+  const [loggingTime, setLoggingTime] = useState("10pm");
+
+  const [natureOfTask, setNature] = useState("");
   const [status, setStatus] = useState("");
 
   // Get All Email
@@ -66,22 +86,28 @@ const TaskForm = () => {
       });
   };
 
-  const createProductSubmitHandler = (e) => {
+  const taskSubmitHandler = (e) => {
     e.preventDefault();
+    console.log("allEmails", allEmails);
+    const allSelectedEmail = [];
+    allEmails.map((val) => allSelectedEmail.push(val.value));
+    console.log(allSelectedEmail);
     const myForm = new FormData();
     if (!loading && project !== null) {
-      myForm.set("title", title);
-      myForm.set("desc", desc);
-      myForm.set("nature", nature);
+      myForm.set("taskTitle", taskTitle);
+      myForm.set("description", description);
+      myForm.set("natureOfTask", natureOfTask);
       myForm.set("projectKey", project.projectKey);
       myForm.set("projectId", project._id);
       myForm.set("assignUser", assignUser);
       myForm.set("status", status);
       myForm.set("startTime", startTime);
-      myForm.set("endTime", endTime);
-      myForm.set("loggingTime", logginTime);
+      myForm.set("endTime", "none");
+      myForm.set("assigneUser", allMembers);
+
+
+      myForm.set("loggingTime", "0");
       dispatch(newTask(myForm));
-     
     }
   };
 
@@ -100,20 +126,37 @@ const TaskForm = () => {
   useEffect(() => {
     if (taskError) {
       toast.error(taskError, {
-        toastId: "error1",
+        toastId: "error2",
         autoClose: 1000,
       });
       dispatch(clearErrors());
     }
-    if(success){
+    if (success) {
       toast.success("Task Created Successfully", {
-        toastId: "success1",
+        toastId: "success",
         autoClose: 1000,
       });
       dispatch({ type: NEW_TASK_RESET });
     }
+  }, [dispatch, taskError, success]);
 
-  }, [dispatch,taskError,success]);
+  const addMembers = () => {
+ 
+   let memberInfo={
+    userRole: userRole,
+    userEmail: assignUserTask,
+  }
+    setAllMembers([...allMembers,memberInfo])
+    onClose()
+  };
+
+  
+
+
+
+  useEffect(() => {
+    allEmails = assignUser;
+  }, [assignUser]);
 
   return (
     <>
@@ -125,10 +168,7 @@ const TaskForm = () => {
         </Center>
       ) : (
         <>
-          <form
-            onSubmit={createProductSubmitHandler}
-            encType="multipart/form-data"
-          >
+          <form onSubmit={taskSubmitHandler} encType="multipart/form-data">
             <Box
               bg={useColorModeValue("white", "gray.900")}
               boxShadow={"2xl"}
@@ -136,20 +176,18 @@ const TaskForm = () => {
               p={6}
             >
               <FormControl mt={5} isRequired>
-                <FormLabel htmlFor="title">
-                  Task Title
-                </FormLabel>
+                <FormLabel htmlFor="taskTitle">Task Title</FormLabel>
                 <Input
                   id="title"
                   type="text"
-                  name="title"
+                  name="taskTitle"
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </FormControl>
               <FormControl mt={5} isRequired>
-                <FormLabel htmlFor="desc">Description</FormLabel>
+                <FormLabel htmlFor="description">Description</FormLabel>
                 <Textarea
-                  name="desc"
+                  name="description"
                   placeholder="Here is a sample placeholder"
                   size="sm"
                   onChange={(e) => setDesc(e.target.value)}
@@ -157,7 +195,7 @@ const TaskForm = () => {
               </FormControl>
 
               <FormControl mt={5} isRequired>
-                <FormLabel htmlFor="desc">Nature Of Task</FormLabel>
+                <FormLabel htmlFor="natureOfTask">Nature Of Task</FormLabel>
                 <Select
                   id="status"
                   placeholder="Select select"
@@ -169,45 +207,72 @@ const TaskForm = () => {
                 </Select>
               </FormControl>
 
-       
-                  <FormControl mt={5} isRequired>
-                    <FormLabel htmlFor="status">Status</FormLabel>
-                    <Select
-                      id="status"
-                      placeholder="Select select"
-                      name="status"
-                      onChange={(e) => setStatus(e.target.value)}
-                    >
-                      <option value={"active"}>Active</option>
-                      <option value={"pending"}>Pending</option>
-                    </Select>
-                  </FormControl>
-                
-                    
-                    <FormControl mt={5}>
-                      <FormLabel htmlFor="assign-user">
-                        Assign Team Mate.
-                      </FormLabel>
+              <FormControl mt={5} isRequired>
+                <FormLabel htmlFor="status">Status</FormLabel>
+                <Select
+                  id="status"
+                  placeholder="Select select"
+                  name="status"
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value={"todo"} defaultValue={"todo"}>
+                    Todo
+                  </option>
+                  <option value={"inprogress"}>In Progress</option>
+                  <option value={"done"}>Done</option>
+                  <option value={"closed"}>Closed</option>
+                </Select>
+              </FormControl>
 
-                      <Select
-                        id="status"
-                        placeholder="Select select"
-                        name="status"
-                        onChange={(e) => setAssignUser(e.target.value)}
-                      >
-                        {allUsersEmail.map((val) => (
-                          <option key={val + 1} value={val}>
-                            {val}
-                          </option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                   
+              <FormControl mt={5} isRequired>
+                <FormLabel>Assign Task </FormLabel>
+                <Button
+                  type="submit"
+                  mt={5}
+                  flex={1}
+                  fontSize={"sm"}
+                  rounded={"full"}
+                  bg={"blue.400"}
+                  color={"white"}
+                  boxShadow={
+                    "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
+                  }
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                  _focus={{
+                    bg: "blue.500",
+                  }}
+                  onClick={onOpen}
+                >
+                  
+                    Add Member
                  
-                
-                    
-                 
-               
+                </Button>
+              </FormControl>
+
+              <FormControl mt={5} isRequired>
+                <FormLabel htmlFor="assign-user">Assign Team Mate.</FormLabel>
+
+                <MultiSelect
+                  options={allUsersEmail}
+                  value={assignUser}
+                  onChange={setAssignUser}
+                  labelledBy="Select"
+                />
+              </FormControl>
+
+              <FormControl mt={5}>
+                <FormLabel htmlFor="assign-user">Start Time</FormLabel>
+
+                <DateTimePicker onChange={setStartTime} value={startTime} />
+              </FormControl>
+              <FormControl mt={5}>
+                <FormLabel htmlFor="assign-user">End Time</FormLabel>
+
+                <DateTimePicker onChange={setEndTime} value={endTime} />
+              </FormControl>
+
               <Button
                 type="submit"
                 mt={5}
@@ -235,6 +300,63 @@ const TaskForm = () => {
               </Button>
             </Box>
           </form>
+
+          {/* Modal */}
+          <Modal
+            initialFocusRef={initialRef}
+            finalFocusRef={finalRef}
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add Member</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl mt={5} isRequired>
+                  <FormLabel htmlFor="assign-user">Assign Team Mate.</FormLabel>
+
+                  <Select
+                    id="status"
+                    placeholder="Select select"
+                    name="status"
+                    onChange={(e) => setAssignUserTask(e.target.value)}
+                  >
+                    {allUsersEmail.map((val) => (
+                      <option key={val.value + 1} value={val.value}>
+                        {val.value}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl mt={5} isRequired>
+                  <FormLabel htmlFor="status">Select User Role</FormLabel>
+                  <Select
+                    id="status"
+                    placeholder="Select select"
+                    name="status"
+                    onChange={(e) => setUserRole(e.target.value)}
+                  >
+                    <option value={"team-member"} defaultValue={"team-member"}>
+                      Team Member
+                    </option>
+
+                    <option value={"administrator"}>Administrator</option>
+                  </Select>
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3}
+                onClick={addMembers}
+                >
+                  Save
+                </Button>
+                <Button onClick={onClose}>Cancel</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </>
       )}
     </>

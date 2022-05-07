@@ -17,10 +17,19 @@ const projectSchema = new mongoose.Schema({
   },
   tasks: [
     {
-      assigneUser: {
-        type: String,
-        required: true,
-      },
+      // assigneUser: [
+      //   {
+      //     userEmail: {
+      //       type: String,
+      //       required: true,
+      //     },
+      //     userRole: {
+      //       type: String,
+      //       required: true,
+      //     },
+      //   },
+      // ],
+      assigneUser: [],
       taskTitle: {
         type: String,
         required: true,
@@ -49,14 +58,8 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
-      role:{
-        type: String,
-        required: true,
-        default:"Team Member"
-      }
     },
   ],
- 
 
   createdAt: {
     type: Date,

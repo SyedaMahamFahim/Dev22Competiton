@@ -82,7 +82,6 @@ exports.updateProject = catchAsyncErrors(async (req, res, next) => {
 exports.createTask = catchAsyncErrors(async (req, res, next) => {
   const {
     taskTitle,
-    assigneUser,
     description,
     natureOfTask,
     status,
@@ -91,10 +90,16 @@ exports.createTask = catchAsyncErrors(async (req, res, next) => {
     loggingTime,
     projectId,
   } = req.body;
+  
+  let project = await Project.findById(projectId);
 
+
+
+  // project.tasks.assigneUser.push(assigneUser);
+ console.log(project.tasks)
   const task = {
     taskTitle,
-    assigneUser,
+    assigneUser:[],
     description,
     natureOfTask,
     status,
@@ -103,7 +108,6 @@ exports.createTask = catchAsyncErrors(async (req, res, next) => {
     loggingTime,
   };
 
-  let project = await Project.findById(projectId);
 
   project.tasks.push(task);
 
@@ -111,5 +115,46 @@ exports.createTask = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    project
+  });
+});
+
+
+// Create Task
+exports.assignUser = catchAsyncErrors(async (req, res, next) => {
+  const {
+    userEmail,
+    userRole,
+    projectId,
+  } = req.body;
+  
+  let project = await Project.findById(projectId);
+
+
+
+  // project.tasks.assigneUser.push(assigneUser);
+ console.log(project.tasks)
+  const task = {
+    taskTitle,
+    assigneUser:{
+      userEmail,
+      userRole,
+    },
+    description,
+    natureOfTask,
+    status,
+    startTime,
+    endTime,
+    loggingTime,
+  };
+
+
+  project.tasks.push(task);
+
+  await project.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+    project
   });
 });

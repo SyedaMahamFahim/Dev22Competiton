@@ -103,16 +103,7 @@ const Projects = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link
-              to={`/project/${params.getValue(params.id, "id")}`}
-              style={{
-                fontSize: "25px",
-                margin: "5px",
-                color: "#1A202C",
-              }}
-            >
-              <AiFillProject />
-            </Link>
+           
 
             <Link
               to={`/project/${params.id}`}
