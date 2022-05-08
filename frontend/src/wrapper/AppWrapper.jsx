@@ -37,6 +37,11 @@ const LinkItems = [
     url: "/projects",
     icon: SiReadthedocs,
   },
+  {
+    name: "Create Projects",
+    url: "/create-project",
+    icon: SiReadthedocs,
+  },
   
 ];
 
