@@ -11,15 +11,15 @@ const sendEmail = expressAsyncHandler(async (req, res) => {
     auth: {
       // user: process.env.SMTP_MAIL,
       // pass: process.env.SMTP_PASSWORD,
-      user: "chuumar88@gmail.com",
-      pass: "chu8umar8",
+      user: "work.nashra@gmail.com",
+      pass: "myworkaccount@000011112222",
     },
   });
 
   const { email, subject, message } = req.body;
   var mailOptions = {
     // from: process.env.SMTP_MAIL,
-    from: "chuumar88@gmail.com",
+    from: "work.nashra@gmail.com",
     to: `${email}`,
     subject: `${subject}`,
     text: `${message}`,
