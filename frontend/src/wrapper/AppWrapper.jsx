@@ -26,14 +26,11 @@ import {
 } from "@chakra-ui/react";
 import { FiHome, FiMenu,FiChevronDown } from "react-icons/fi";
 
-import { TiTickOutline } from "react-icons/ti";
-import { RiStickyNoteLine } from "react-icons/ri";
 import {
-  MdOutlineAssignmentInd,
+ 
   MdOutlinePendingActions,
-  MdNotificationsActive,
+  
 } from "react-icons/md";
-import { VscReport } from "react-icons/vsc";
 import { SiReadthedocs } from "react-icons/si";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
