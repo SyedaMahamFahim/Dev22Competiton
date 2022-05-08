@@ -51,7 +51,7 @@ const TaskForm = () => {
 
   const [taskTitle, setTitle] = useState("");
   const [description, setDesc] = useState("");
-  const [assignUser, setAssignUser] = useState([]);
+  const [assignUser] = useState([]);
   const [assignUserTask, setAssignUserTask] = useState("");
 
   // For Task
@@ -61,7 +61,6 @@ const TaskForm = () => {
   const [endTime, setEndTime] = useState(new Date());
   const [userRole, setUserRole] = useState("");
 
-  const [loggingTime, setLoggingTime] = useState("10pm");
 
   const [natureOfTask, setNature] = useState("");
   const [status, setStatus] = useState("");
@@ -89,8 +88,7 @@ const TaskForm = () => {
         subject: "no-reply",
         message: "Project key",
       };
-      console.log(dataSend);
-      const res = await fetch(`${baseUrl}/api/v1/project/send-email`, {
+       await fetch(`${baseUrl}/api/v1/project/send-email`, {
         method: "POST",
         body: JSON.stringify(dataSend),
         headers: {

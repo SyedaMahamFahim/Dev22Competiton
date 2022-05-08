@@ -44,21 +44,13 @@ const LinkItems = [
     url: "/projects",
     icon: SiReadthedocs,
   },
-  { name: "Create a Project", url: "/create-project", icon: RiStickyNoteLine },
-  { name: "Completed Tasks", url: "/completed-tasks", icon: TiTickOutline },
-  { name: "Active Tasks", url: "/active-tasks", icon: MdNotificationsActive },
-
+ 
   {
-    name: "Pending Tasks",
-    url: "/pending-tasks",
+    name: "Join Project",
+    url: "/join-project",
     icon: MdOutlinePendingActions,
   },
-  {
-    name: "Assignee Tasks",
-    url: "/assigned-tasks",
-    icon: MdOutlineAssignmentInd,
-  },
-  { name: "Reporter Tasks", url: "/reporter-tasks", icon: VscReport },
+  
 ];
 
 const AppWrapper = (Components) =>

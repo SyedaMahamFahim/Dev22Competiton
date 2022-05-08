@@ -1,8 +1,7 @@
-import React,{useState} from "react";
+import React from "react";
 import AppWrapper from "../../wrapper/AppWrapper";
 import { SectionTitle, TaskForm } from "../../components/index";
 import { Box } from "@chakra-ui/react";
-import {useNavigate} from 'react-router-dom'
 
 const CreateTask = () => {  
   return (

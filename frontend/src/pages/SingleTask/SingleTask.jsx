@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect } from "react";
 import AppWrapper from "../../wrapper/AppWrapper";
 import { SectionTitle } from "../../components/index";
 import {
@@ -9,15 +9,10 @@ import {
   useColorModeValue,
   Text,
   Divider,
-  Button,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearErrors,
-  getTaskDetails,
-} from "../../store/actions/projectAction";
-import { Link } from "react-router-dom";
+import { clearErrors, getTaskDetails } from "../../store/actions/projectAction";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dateFormat from "dateformat";
@@ -26,9 +21,7 @@ const SingleTask = () => {
   const params = useParams();
   const dispatch = useDispatch();
 
-  const {loading, error } = useSelector(
-    (state) => state.getTaskDetails
-  );
+  const { loading, error, task } = useSelector((state) => state.taskDetails);
 
   useEffect(() => {
     if (error) {
@@ -39,13 +32,8 @@ const SingleTask = () => {
       dispatch(clearErrors());
     }
 
-    dispatch(getTaskDetails(params.id,params.taskId));
-  }, [dispatch, params.id,params.taskId]);
-  // let allTaskArry = [];
-  // if (!loading) {
-  //   allTaskArry = project.tasks || [];
-  // }
-  // console.log("allTaskArry", allTaskArry.length);
+    dispatch(getTaskDetails(params.id, params.taskId));
+  }, [dispatch, params.id, params.taskId]);
 
   return (
     <>
@@ -57,18 +45,12 @@ const SingleTask = () => {
         </Center>
       ) : (
         <>
-         <SectionTitle
-            text={"project.title"}
-            align="center"
-            variant="h1"
-            subText={`Created At `}
-            />
-           {/* <SectionTitle
-            text={project.title}
+          <SectionTitle
+            text={task.taskTitle}
             align="center"
             variant="h1"
             subText={`Created At 
-       ${dateFormat(project.createdAt, "dddd, mmmm dS, yyyy,")}`} 
+       ${dateFormat(task.createdAt, "dddd, mmmm dS, yyyy,")}`}
           />
           <Box
             bg={useColorModeValue("white", "gray.900")}
@@ -79,54 +61,57 @@ const SingleTask = () => {
             <Box>
               <Heading>Project Id</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {project._id}
+                {task._id}
               </Text>
             </Box>
             <Divider />
             <Box my={4}>
               <Heading>Title</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {project.title}
+                {task.taskTitle}
               </Text>
             </Box>
             <Divider />
             <Box mt={"1.75rem"}>
-              <Heading>Project Key</Heading>
+              <Heading>Description</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {project.projectKey}
+                {task.description}
               </Text>
             </Box>
             <Divider />
             <Box mt={"1.75rem"}>
-              <Heading>Total Tasks</Heading>
+              <Heading>Nature Of Task</Heading>
               <Text fontWeight={600} color={"gray.500"} my={4}>
-                {!loading && allTaskArry.length}
+                {task.natureOfTask}
               </Text>
             </Box>
-
-            <Button
-              type="submit"
-              bg={"blue.400"}
-              color={"white"}
-              _hover={{
-                bg: "blue.500",
-              }}
-              mr={5}
-              // onClick={loginForm}
-            >
-              <Link to={`/${project._id}/all-tasks`}>View All Tasks</Link>
-            </Button>
-            <Button
-              type="submit"
-              bg={"blue.400"}
-              color={"white"}
-              _hover={{
-                bg: "blue.500",
-              }}
-            >
-              <Link to={`/${project._id}/create-task`}>Create New Task</Link>
-            </Button>
-          </Box> */}
+            <Divider />
+            <Box mt={"1.75rem"}>
+              <Heading>Status</Heading>
+              <Text fontWeight={600} color={"gray.500"} my={4}>
+                {task.status}
+              </Text>
+            </Box>
+            <Divider />
+            <Box mt={"1.75rem"}>
+              <Heading>Start Time</Heading>
+              <Text fontWeight={600} color={"gray.500"} my={4}>
+                {dateFormat(task.startTime, "dddd, mmmm dS, yyyy,")}
+              </Text>
+            </Box>
+            <Divider />
+            <Box mt={"1.75rem"}>
+              <Heading>Logging Time</Heading>
+              <Text fontWeight={600} color={"gray.500"} my={4}>
+                Logging
+              </Text>
+            </Box>
+            <Divider />
+            <Box mt={"1.75rem"}>
+              <Heading>End Time</Heading>
+              <Text fontWeight={600} color={"gray.500"} my={4}></Text>
+            </Box>
+          </Box>
         </>
       )}
     </>

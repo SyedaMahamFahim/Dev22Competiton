@@ -3,7 +3,7 @@ import AppWrapper from "../../wrapper/AppWrapper";
 import { SectionTitle } from "../../components/index";
 import { Box } from "@chakra-ui/react";
 import dateFormat from "dateformat";
-import { AiFillDelete, AiOutlineLink, AiFillProject } from "react-icons/ai";
+import { AiFillDelete, AiOutlineLink } from "react-icons/ai";
 
 import { DataGrid } from "@material-ui/data-grid";
 import { useSelector, useDispatch } from "react-redux";

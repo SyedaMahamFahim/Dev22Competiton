@@ -109,7 +109,7 @@ exports.getSingleTask = catchAsyncErrors(async (req, res, next) => {
   }
   let task = project.tasks.filter((task)=>{if(task._id==req.params.taskId){return task}});
 
-
+task=task[0]
   res.status(200).json({
     success: true,
     task

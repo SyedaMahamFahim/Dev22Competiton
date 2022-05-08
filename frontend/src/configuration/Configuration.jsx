@@ -2,22 +2,12 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import {
   LoginSignup,
-  Home,
-  CompletedTasks,
-  AddTask,
-  AssigneeTasks,
-  PendingTasks,
-  ReporterTasks,
-  UpdateTask,
-  GetAllTasks,
-  ActiveTask,
   SingleTask,
   CreateProject,
   Projects,
   SingleProject,
   CreateTask,
   Tasks,
-  TileProjects
 } from "../pages/index";
 import PrivateRoute from "./PrivateRoute";
 const Configuration = () => {
@@ -25,51 +15,28 @@ const Configuration = () => {
     <>
       <Routes>
         <Route path="/" element={<LoginSignup />} />
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/add-tasks"
-          element={
-            <PrivateRoute>
-              <AddTask />
-            </PrivateRoute>
-          }
-        />
+        
         <Route
           path="/projects"
           element={
             <PrivateRoute>
-              <Projects/>
+              <Projects />
             </PrivateRoute>
           }
         />
-         <Route
-          path="/projects/tiles"
-          element={
-            <PrivateRoute>
-              <TileProjects/>
-            </PrivateRoute>
-          }
-        />
-         <Route
+        <Route
           path="/project/:id"
           element={
             <PrivateRoute>
-              <SingleProject/>
+              <SingleProject />
             </PrivateRoute>
           }
         />
-         <Route
+        <Route
           path="/:id/all-tasks"
           element={
             <PrivateRoute>
-              <Tasks/>
+              <Tasks />
             </PrivateRoute>
           }
         />
@@ -77,81 +44,26 @@ const Configuration = () => {
           path="/:id/create-task"
           element={
             <PrivateRoute>
-              <CreateTask/>
+              <CreateTask />
             </PrivateRoute>
           }
         />
 
-         <Route
+        <Route
           path="/create-project"
           element={
             <PrivateRoute>
-              <CreateProject/>
+              <CreateProject />
             </PrivateRoute>
           }
         />
-        <Route
-          path="/completed-tasks"
-          element={
-            <PrivateRoute>
-              <CompletedTasks />
-            </PrivateRoute>
-          }
-        />
+  
 
-        <Route
-          path="/pending-tasks"
-          element={
-            <PrivateRoute>
-              <PendingTasks />
-            </PrivateRoute>
-          }
-        />
-         <Route
-          path="/active-tasks"
-          element={
-            <PrivateRoute>
-              <ActiveTask />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/get-all-tasks"
-          element={
-            <PrivateRoute>
-              <GetAllTasks />
-            </PrivateRoute>
-          }
-        />
-         <Route
-          path="/assigned-tasks"
-          element={
-            <PrivateRoute>
-              <AssigneeTasks />
-            </PrivateRoute>
-          }
-        />
-         <Route
-          path="/reporter-tasks"
-          element={
-            <PrivateRoute>
-              <ReporterTasks />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/update-task/:id"
-          element={
-            <PrivateRoute>
-              <UpdateTask/>
-            </PrivateRoute>
-          }
-        />
         <Route
           path="/project/:id/task/:taskId"
           element={
             <PrivateRoute>
-              <SingleTask/>
+              <SingleTask />
             </PrivateRoute>
           }
         />

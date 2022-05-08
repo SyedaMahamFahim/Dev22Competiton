@@ -1,5 +1,4 @@
 import axios from "axios";
-import baseUrl from "../../configuration/baseUrl";
 import {
   NEW_PROJECT_REQUEST,
   NEW_PROJECT_SUCCESS,

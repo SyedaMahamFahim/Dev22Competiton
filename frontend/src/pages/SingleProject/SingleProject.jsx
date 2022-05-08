@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import AppWrapper from "../../wrapper/AppWrapper";
 import { SectionTitle } from "../../components/index";
 import {
