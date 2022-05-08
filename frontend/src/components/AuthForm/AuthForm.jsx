@@ -89,13 +89,13 @@ const AuthForm = () => {
 
     if (isAuthenticated && !signUp) {
       // localStorage.setItem("token", email);
-      navigate("/home");
+      navigate("/projects");
     }
 
     if (!isAuthenticated) {
       navigate("/")
     }else{
-      navigate("/home")
+      navigate("/projects")
     }
     let getUserToken = localStorage.getItem("token");
     if (
@@ -105,7 +105,7 @@ const AuthForm = () => {
     ) {
       navigate("/");
     } else {
-      navigate("/home");
+      navigate("/projects");
     }
   }, [dispatch, error, isAuthenticated]);
 

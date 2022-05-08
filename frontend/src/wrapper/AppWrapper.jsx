@@ -26,26 +26,16 @@ import {
 } from "@chakra-ui/react";
 import { FiHome, FiMenu,FiChevronDown } from "react-icons/fi";
 
-import {
- 
-  MdOutlinePendingActions,
-  
-} from "react-icons/md";
+
 import { SiReadthedocs } from "react-icons/si";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const LinkItems = [
-  { name: "Home", url: "/home", icon: FiHome },
+  { name: "Home", url: "/projects", icon: FiHome },
   {
     name: "All Projects",
     url: "/projects",
     icon: SiReadthedocs,
-  },
- 
-  {
-    name: "Join Project",
-    url: "/join-project",
-    icon: MdOutlinePendingActions,
   },
   
 ];
